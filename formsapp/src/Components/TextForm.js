@@ -10,6 +10,7 @@ class TextForm extends Component{
       type : 'TextForm',
       question : ''
     }
+    this.props.onChange(this.state)
 
     this.onQuestionChange = this.onQuestionChange.bind(this)
   }
@@ -18,10 +19,10 @@ class TextForm extends Component{
     this.setState({
       key : this.state.key,
       type : this.state.type,
-      question : this.refs.question.vaue
+      question : this.refs.question.value
     })
 
-    this.props.onPieceChange(this.state)
+    this.props.onChange(this.state)
   }
 
   render()

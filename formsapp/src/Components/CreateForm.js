@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AddFormPiece from './AddFormPiece.js'
 import TextForm from './TextForm.js'
 import SingleChoiceFormPiece from './SingleChoiceFormPiece.js'
+import axios from 'axios'
 
 
 class CreateForm extends Component {
@@ -9,41 +10,57 @@ class CreateForm extends Component {
 
   constructor(props){
     super(props)
-    this.state={ title : '',
+    this.state={ form:{title : '',
                  description : '',
+                 listOfStates:[]},
                  listOfPieces : []}
+
     this.addPiece= this.addPiece.bind(this)
     this.onTitleChange = this.onTitleChange.bind(this)
     this.onDescriptionChange = this.onDescriptionChange.bind(this)
     this.onPieceChange = this.onPieceChange.bind(this)
+    this.setThisState = this.setThisState.bind(this)
+  }
+
+  setThisState(){
+    this.setState({from : { 
+                    title : this.state.form.title,
+                    description : this.state.form.description,
+                    listOfStates: this.state.form.listOfStates
+                  },
+                  listOfPieces : this.state.listOfPieces})
   }
 
   addPiece(piece){
 
     this.state.listOfPieces.push(piece)
-    this.setState({title : this.state.title,
-                 description : this.state.description,
-                 listOfPieces : this.state.listOfPieces})
+    this.state.listOfStates.push({})
+    this.setThisState();
   }
 
   onPieceChange(stateOfPiece){
-
+    this.state.form.listOfStates[stateOfPiece.key] = stateOfPiece; 
+    this.setThisState();
   }
 
   onTitleChange(){
-    this.setState({title : this.refs.titleRef.value,
-                 description : this.state.description,
-                 listOfPieces : this.state.listOfPieces})
+    this.state.form.title = this.refs.titleRef.value
+    this.setThisState() ;
     console.log(this.state)
   }
 
   onDescriptionChange(){
-    this.setState({title : this.state.title,
-                 description : this.refs.descriptionRef.value,
-                 listOfPieces : this.state.listOfPieces})
+    this.state.form.description = this.refs.descriptionRef.value
+    this.setThisState();
     console.log(this.state)
   }
 
+  createPool()
+  {
+    axios.post('http://localhost:5000', this.state.form).then((res)=>{
+      alert(res); 
+    })
+  }
 
   render(){
 
@@ -67,12 +84,12 @@ class CreateForm extends Component {
                   </div>
               </span>
               {this.state.listOfPieces.map( (FormPiece, index) => {
-                return (<div><FormPiece key={index}/><br/></div>)
+              return (<div><FormPiece key={index} onChange={onPieceChange}/><br/></div>)
               }) }
               <AddFormPiece addPiece = {this.addPiece} onPieceChange={this.onPieceChange} />
             </div>
             <div className="card-action">
-              <a href="#">Create poll</a>
+              <a href="#" onClick={this.createPool}>Create poll</a>
             </div>
           </div>
         </div>
