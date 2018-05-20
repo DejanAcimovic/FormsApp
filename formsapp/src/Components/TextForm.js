@@ -6,7 +6,7 @@ class TextForm extends Component{
   {
     super(props)
     this.state = {
-      key : this.props.key,
+      key : this.props.keyy,
       type : 'TextForm',
       question : ''
     }
@@ -16,10 +16,13 @@ class TextForm extends Component{
   }
 
   onQuestionChange(){
+
+    this.state.question = this.refs.question.value
+
     this.setState({
       key : this.state.key,
       type : this.state.type,
-      question : this.refs.question.value
+      question : this.state.question
     })
 
     this.props.onChange(this.state)

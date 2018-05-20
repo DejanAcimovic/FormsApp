@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import AddFormPiece from './AddFormPiece.js'
 import TextForm from './TextForm.js'
-import SingleChoiceFormPiece from './SingleChoiceFormPiece.js'
+import ChoiceFormPiece from './ChoiceFormPiece.js'
 import axios from 'axios'
 
 
@@ -29,16 +29,18 @@ class CreateForm extends Component {
                     listOfStates: this.state.form.listOfStates
                   },
                   listOfPieces : this.state.listOfPieces})
+    console.log(this.state)
   }
 
-  addPiece(piece){
+  addPiece(piece, tip){
 
     this.state.listOfPieces.push(piece)
-    this.state.listOfStates.push({})
+    this.state.form.listOfStates.push({type:tip})
     this.setThisState();
   }
 
   onPieceChange(stateOfPiece){
+    console.log('pozvala se promjena dijela')
     this.state.form.listOfStates[stateOfPiece.key] = stateOfPiece; 
     this.setThisState();
   }
@@ -84,7 +86,8 @@ class CreateForm extends Component {
                   </div>
               </span>
               {this.state.listOfPieces.map( (FormPiece, index) => {
-              return (<div><FormPiece key={index} onChange={onPieceChange}/><br/></div>)
+              return (
+                <div><FormPiece key={index} keyy = {index} onChange={this.onPieceChange} type={this.state.form.listOfStates[index].type}/><br/></div>)
               }) }
               <AddFormPiece addPiece = {this.addPiece} onPieceChange={this.onPieceChange} />
             </div>

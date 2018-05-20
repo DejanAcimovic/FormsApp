@@ -6,7 +6,7 @@ class NumberFormPiece extends Component{
   {
     super(props)
     this.state = {
-      key:this.props.key,
+      key:this.props.keyy,
       type:'NumberForm',
       maxValue:null,
       minValue:null,
@@ -28,7 +28,7 @@ class NumberFormPiece extends Component{
       type:this.state.type,
       maxValue:this.state.maxValue,
       minValue:this.state.minValue,
-      question: thsi.state.question
+      question: this.state.question
     })
       
     this.props.onChange(this.state)
