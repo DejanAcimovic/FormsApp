@@ -20,6 +20,7 @@ class CreateForm extends Component {
     this.onDescriptionChange = this.onDescriptionChange.bind(this)
     this.onPieceChange = this.onPieceChange.bind(this)
     this.setThisState = this.setThisState.bind(this)
+    this.createPool = this.createPool.bind(this)
   }
 
   setThisState(){
@@ -59,9 +60,9 @@ class CreateForm extends Component {
 
   createPool()
   {
-    axios.post('http://localhost:5000', this.state.form).then((res)=>{
+    axios.post('http://localhost:5000/createForm', this.state.form ).then((res)=>{
       alert(res); 
-    })
+    }) 
   }
 
   render(){

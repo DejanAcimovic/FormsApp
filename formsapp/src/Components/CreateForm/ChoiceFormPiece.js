@@ -100,8 +100,10 @@ class ChoiceFormPiece extends Component{
           <a className="btn-floating btn-small waves-effect waves-light red darken-3 right">
             <i className="material-icons" onClick={this.addChoice}>add</i>
           </a>
+          
         </form>
-
+        <br></br>
+        <br></br>
       </div>
     );
   }
