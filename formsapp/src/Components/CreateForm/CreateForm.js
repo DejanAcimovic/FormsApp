@@ -8,59 +8,49 @@ import axios from 'axios'
 class CreateForm extends Component {
 
 
-  constructor(props){
-    super(props)
-    this.state={ form:{title : '',
-                 description : '',
-                 listOfStates:[]},
-                 listOfPieces : []}
-
-    this.addPiece= this.addPiece.bind(this)
-    this.onTitleChange = this.onTitleChange.bind(this)
-    this.onDescriptionChange = this.onDescriptionChange.bind(this)
-    this.onPieceChange = this.onPieceChange.bind(this)
-    this.setThisState = this.setThisState.bind(this)
-    this.createPool = this.createPool.bind(this)
+  state={ 
+    form:{      
+        title : '',
+        description : ''
+      },
+    listOfStates:[],
+    listOfPieces : []
   }
 
-  setThisState(){
-    this.setState({from : { 
-                    title : this.state.form.title,
-                    description : this.state.form.description,
-                    listOfStates: this.state.form.listOfStates
-                  },
-                  listOfPieces : this.state.listOfPieces})
-    console.log(this.state)
+  addPiece = (piece, type) => {
+    this.setState((prevState, props) => 
+    ({ 
+      listOfStates : [...prevState.listOfStates, type],
+      listOfPieces: [...prevState.listOfPieces, piece]
+    }));
   }
 
-  addPiece(piece, tip){
-
-    this.state.listOfPieces.push(piece)
-    this.state.form.listOfStates.push({type:tip})
-    this.setThisState();
+  onPieceChange = (stateOfPiece) => {
+      var element = this.state.listOfStates[stateOfPiece.key] 
+      element = stateOfPiece
+      this.forceUpdate();
   }
 
-  onPieceChange(stateOfPiece){
-    console.log('pozvala se promjena dijela')
-    this.state.form.listOfStates[stateOfPiece.key] = stateOfPiece; 
-    this.setThisState();
+  onTitleChange = (e) => {
+    e.persist()
+    this.setState((prevState, props) => {
+      var form = {...this.state.form}
+      form.title = e.target.value
+      return {form}
+    })
   }
 
-  onTitleChange(){
-    this.state.form.title = this.refs.titleRef.value
-    this.setThisState() ;
-    console.log(this.state)
+  onDescriptionChange = (e) => {
+    e.persist();
+    this.setState((prevState, props) => {
+      var form = {...this.state.form}
+      form.description = e.target.value
+      return {form}
+    })
   }
 
-  onDescriptionChange(){
-    this.state.form.description = this.refs.descriptionRef.value
-    this.setThisState();
-    console.log(this.state)
-  }
-
-  createPool()
-  {
-    axios.post('http://localhost:5000/createForm', this.state.form ).then((res)=>{
+  createPool = () => {
+    axios.post('http://localhost:5000/createForm', this.state).then((res)=>{
       alert(res); 
     }) 
   }
@@ -72,23 +62,23 @@ class CreateForm extends Component {
         <div className="card blue-grey darken-1">
             <div className="card-content white-text">
               <span className="card-title">
-                <h1> Froms Creator</h1>
+                <h1> Forms Creator</h1>
                   <div className="row">
                     <div className="input-field col s12">
-                      <input id="FormName" type="text" className="validate white-text" ref="titleRef" onBlur={this.onTitleChange}/>
+                      <input id="FormName" type="text" className="validate white-text" onChange={this.onTitleChange}/>
                       <label htmlFor="FormName">Name of form</label>
                     </div>
                   </div>
                   <div className="row">
                     <div className="input-field col s12">
-                      <textarea id="FormDescription" type="text" className="materialize-textarea white-text"ref="descriptionRef" onBlur={this.onDescriptionChange} />
+                      <textarea id="FormDescription" type="text" className="materialize-textarea white-text" onChange={this.onDescriptionChange} />
                       <label htmlFor="FormDescription">Descrioption of form</label>
                     </div>
                   </div>
               </span>
               {this.state.listOfPieces.map( (FormPiece, index) => {
               return (
-                <div><FormPiece key={index} keyy = {index} onChange={this.onPieceChange} type={this.state.form.listOfStates[index].type}/><br/></div>)
+                <div><FormPiece key={index} keyy = {index} onChange={this.onPieceChange} type={this.state.listOfStates[index]}/><br/></div>)
               }) }
               <AddFormPiece addPiece = {this.addPiece} onPieceChange={this.onPieceChange} />
             </div>

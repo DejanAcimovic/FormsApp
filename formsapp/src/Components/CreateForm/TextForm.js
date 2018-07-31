@@ -10,22 +10,10 @@ class TextForm extends Component{
       type : 'TextForm',
       question : ''
     }
-    this.props.onChange(this.state)
-
-    this.onQuestionChange = this.onQuestionChange.bind(this)
   }
 
-  onQuestionChange(){
-
-    this.state.question = this.refs.question.value
-
-    this.setState({
-      key : this.state.key,
-      type : this.state.type,
-      question : this.state.question
-    })
-
-    this.props.onChange(this.state)
+  onQuestionChange = (e) =>{
+    this.setState({question : e.target.value}, () => this.props.onChange(this.state))
   }
 
   render()
@@ -34,7 +22,7 @@ class TextForm extends Component{
       <div className='container'>
         <div className="row">
           <div className="input-field col s12">
-            <input id="TextFormName" type="text" className="validate white-text" ref="question" onBlur={this.onQuestionChange}/>
+            <input id="TextFormName" type="text" className="validate white-text" onChange={this.onQuestionChange}/>
             <label htmlFor="TextFormName">Type your question</label>
           </div>
         </div>

@@ -14,40 +14,22 @@ class NumberFormPiece extends Component{
     }
 
     this.props.onChange(this.state)
-
-    this.setThisState = this.setThisState.bind(this)
-    this.onMaxChange = this.onMaxChange.bind(this)
-    this.onMinChange = this.onMinChange.bind(this)
-    this.onQuestionChange = this.onQuestionChange.bind(this)
   }
 
-  setThisState()
-  {
-    this.setState({
-      key:this.state.key,
-      type:this.state.type,
-      maxValue:this.state.maxValue,
-      minValue:this.state.minValue,
-      question: this.state.question
-    })
-      
-    this.props.onChange(this.state)
 
+  onQuestionChange = (e) =>{
+    const question = e.target.value;
+    this.setState({question}, () => this.props.onChange(this.state))
   }
 
-  onQuestionChange(){
-    this.state.question = this.refs.question.value
-    this.setThisState();
+  onMaxChange = (e) => {
+    const maxValue = e.target.value;
+    this.setState({ maxValue }, () => this.props.onChange(this.state))
   }
 
-  onMaxChange(){
-    this.state.maxValue = this.refs.maxValue.value
-    this.setThisState();
-  }
-
-  onMinChange(){
-    this.state.minValue = this.refs.minValue.value
-    this.setThisState();
+  onMinChange = (e) => {
+    const minValue = e.target.value;
+    this.setState({ minValue }, () => this.props.onChange(this.state))
   }
 
   render()
@@ -56,7 +38,7 @@ class NumberFormPiece extends Component{
       <div className='container'>
         <div className="row">
           <div className="input-field col s12">
-            <input id="TextFormName" type="text" className="validate white-text" ref='question' onBlur={this.onQuestionChange}/>
+            <input id="TextFormName" type="text" className="validate white-text" onChange={this.onQuestionChange}/>
             <label htmlFor="TextFormName">Type your question</label>
           </div>
         </div>
@@ -68,13 +50,13 @@ class NumberFormPiece extends Component{
         </div>
         <div className="row">
           <div className="input-field col s12">
-            <input id="min" type="Number" className="validate" ref="minValue" onBlur={this.onMinChange}/>
+            <input id="min" type="Number" className="validate" onChange={this.onMinChange}/>
             <label htmlFor="min">Min value (leave empty for no restrictions)</label>
           </div>
         </div>
         <div className="row">
           <div className="input-field col s12">
-            <input id="max" type="Number" className="validate" ref='maxValue' onBlur={this.onMaxChange}/>
+            <input id="max" type="Number" className="validate" onChange={this.onMaxChange}/>
             <label htmlFor="max">Max value (leave empty for no restrictions)</label>
           </div>
         </div>
