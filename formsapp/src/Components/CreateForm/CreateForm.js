@@ -2,19 +2,19 @@ import React, { Component } from 'react'
 import AddFormPiece from './AddFormPiece.js'
 import TextForm from './TextForm.js'
 import ChoiceFormPiece from './ChoiceFormPiece.js'
+import Question from './Question';
+
 import axios from 'axios'
+import AddQuestion from './AddQuestion.js';
 
 
 class CreateForm extends Component {
 
 
-  state={ 
-    form:{      
-        title : '',
-        description : ''
-      },
-    listOfStates:[],
-    listOfPieces : []
+  state={    
+    title : '',
+    description : '',
+    questions:[{question:'alksdjf', payload:{type:'text'}},{question:'alksdjf', payload:{type:'number',min:0,max:10}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'multipleChoice',choices:['bla',';bla']}}]
   }
 
   addPiece = (piece, type) => {
@@ -76,11 +76,10 @@ class CreateForm extends Component {
                     </div>
                   </div>
               </span>
-              {this.state.listOfPieces.map( (FormPiece, index) => {
-              return (
-                <div><FormPiece key={index} keyy = {index} onChange={this.onPieceChange} type={this.state.listOfStates[index]}/><br/></div>)
-              }) }
-              <AddFormPiece addPiece = {this.addPiece} onPieceChange={this.onPieceChange} />
+              {
+                this.state.questions.map((question, index)=>(<Question {...question} index={index}/>))
+              }
+              <AddQuestion/>
             </div>
             <div className="card-action">
               <a href="#" onClick={this.createPool}>Create poll</a>
