@@ -5,11 +5,11 @@ const Question = (props)=>(
       <p>{props.question}</p>
       {
         props.payload.type==='text' &&
-        <input type='text'/>
+        <input type='text' disabled={!!props.disabled}/>
       }
       {
         props.payload.type==='number' &&
-        <input type='number' className="validate white-text" min={props.payload.min} max={props.payload.max} defaultValue={props.payload.min}/>
+        <input type='number' className="validate white-text" min={props.payload.min} max={props.payload.max} defaultValue={props.payload.min} disabled={!!props.disabled}/>
       }
       {
         props.payload.type==='singleChoice' &&
@@ -18,7 +18,7 @@ const Question = (props)=>(
         props.payload.choices.map((choice)=>(
           <p>
             <label>
-              <input name={'r'+props.index} type="radio" value="option1" />
+              <input name={'r'+props.index} type="radio" value="option1" disabled={!!props.disabled} />
               <span>{choice}</span>
             </label>
           </p>
@@ -34,7 +34,7 @@ const Question = (props)=>(
         props.payload.choices.map((choice)=>(
           <p>
             <label>
-              <input type="checkbox" value="option1" />
+              <input type="checkbox" value="option1" disabled={!!props.disabled}/>
               <span>{choice}</span>
             </label>
           </p>

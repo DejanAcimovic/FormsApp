@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
-import AddFormPiece from './AddFormPiece.js'
-import TextForm from './TextForm.js'
-import ChoiceFormPiece from './ChoiceFormPiece.js'
 import Question from './Question';
-
 import axios from 'axios'
 import AddQuestion from './AddQuestion.js';
 
+
+const deletable = (SomeComponent,props, onDelete) => {
+    return (
+      <div>
+        <a class="btn-floating btn-small waves-effect waves-light red darken-4 right"><i className="material-icons" onClick={onDelete} >delete</i></a>
+        <SomeComponent {...props}/>
+        <br/>
+      </div>
+    )
+}
 
 class CreateForm extends Component {
 
@@ -17,18 +23,11 @@ class CreateForm extends Component {
     questions:[{question:'alksdjf', payload:{type:'text'}},{question:'alksdjf', payload:{type:'number',min:0,max:10}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'multipleChoice',choices:['bla',';bla']}}]
   }
 
-  addPiece = (piece, type) => {
+  addQuestion = (question) =>{
     this.setState((prevState, props) => 
     ({ 
-      listOfStates : [...prevState.listOfStates, type],
-      listOfPieces: [...prevState.listOfPieces, piece]
+      questions : [...prevState.questions, question]
     }));
-  }
-
-  onPieceChange = (stateOfPiece) => {
-      var element = this.state.listOfStates[stateOfPiece.key] 
-      element = stateOfPiece
-      this.forceUpdate();
   }
 
   onTitleChange = (e) => {
@@ -49,8 +48,15 @@ class CreateForm extends Component {
     })
   }
 
+  onQuestionDelete = (index) => {
+    const questions = this.state.questions.filter((element,elementIndex)=>{
+      return elementIndex!=index;
+    })
+    this.setState({questions});
+  }
+
   createPool = () => {
-    axios.post('http://localhost:5000/createForm', this.state).then((res)=>{
+    axios.post('http://localhost:5000/createForm', this.state.questions).then((res)=>{
       alert(res); 
     }) 
   }
@@ -77,12 +83,20 @@ class CreateForm extends Component {
                   </div>
               </span>
               {
-                this.state.questions.map((question, index)=>(<Question {...question} index={index}/>))
+                this.state.questions.map(
+                  
+                  //(question, index)=>(<Question {...question} index={index} disabled={true}/>)
+                (question,index)=>{
+                  const DeletableQuestion = deletable(Question,{...question,index:index,disabled:true},()=>{this.onQuestionDelete(index)})
+                  return DeletableQuestion;
+                }
+                
+                )
               }
-              <AddQuestion/>
+              <AddQuestion addQuestion={this.addQuestion}/>
             </div>
             <div className="card-action">
-              <a href="#" onClick={this.createPool}>Create poll</a>
+              <a class="btn-large waves-effect waves-light yellow darken-4 center center">CREATE POOL</a>
             </div>
           </div>
         </div>

@@ -3,25 +3,35 @@ import React, { Component } from 'react'
 class QuestionPayload extends Component{
 
     state = {
-        type:'text'
+        type:'text',
+        choices: null,
+        max: null,
+        min: null 
     }
 
     optionChanged = (e) => {
-        this.setState({ type : e.target.value })
-        
+        this.setState({ type : e.target.value, max:null, min:null, choices:null }, ()=>{this.sendPayload()})
     }
 
     maxChanged = (e) => {
-        this.setState({max : e.target.value})
+        this.setState({max : e.target.value}, ()=>{this.sendPayload()})
     }
 
     minChanged = (e) => {
-        this.setState({min : e.target.value})
+        this.setState({min : e.target.value}, ()=>{this.sendPayload()})
     }
 
     choicesChanged = (e) => {
         let choices = e.target.value.split(',')
-        this.setState({choices})
+        this.setState({choices : choices}, ()=>{this.sendPayload()})
+    }
+
+    sendPayload = () => {
+        let payload = { type : this.state.type }
+        if( this.state.max != null ) payload.max = this.state.max
+        if( this.state.min != null ) payload.min = this.state.min
+        if( this.state.choices != null ) payload.choices = this.state.choices
+        this.props.addPayload(payload)
     }
     render(){
         return(
@@ -67,14 +77,24 @@ class QuestionPayload extends Component{
                         </form>
                     </div>
                 }
-                 {
-                    (this.state.type === 'multipleChoice' || this.state.type === 'singleChoice') && 
+                {
+                    (this.state.type === 'singleChoice') && 
                     <div className='grey-text'>
                         <br/>
-                        Write comma divided list of elements:
-                        <form>
-                            <textarea  onChange={this.minChanged}/>
-                        </form>
+                        <div class="input-field col s12">
+                            <textarea className="materialize-textarea" onChange={this.choicesChanged}></textarea>
+                            <label for="textarea1">Write comma divided list of elements</label>
+                        </div>
+                    </div>
+                }
+                {
+                    (this.state.type === 'multipleChoice') && 
+                    <div className='grey-text'>
+                        <br/>
+                        <div class="input-field col s12">
+                            <textarea className="materialize-textarea" onChange={this.choicesChanged}></textarea>
+                            <label for="textarea1">Write comma divided list of elements</label>
+                        </div>
                     </div>
                 }
             </div>
