@@ -10,7 +10,11 @@ class QuestionPayload extends Component{
     }
 
     optionChanged = (e) => {
-        this.setState({ type : e.target.value, max:null, min:null, choices:null }, ()=>{this.sendPayload()})
+        if(e.target.value === 'singleChoice' || e.target.value === 'multipleChoice'){
+            this.setState({ type : e.target.value, max:null, min:null, choices:[] }, ()=>{this.sendPayload()})    
+        } else{
+            this.setState({ type : e.target.value, max:null, min:null, choices:null }, ()=>{this.sendPayload()})
+        }
     }
 
     maxChanged = (e) => {
@@ -23,6 +27,7 @@ class QuestionPayload extends Component{
 
     choicesChanged = (e) => {
         let choices = e.target.value.split(',')
+        if(choices.length == 1 && choices[0] == '') choices = [] 
         this.setState({choices : choices}, ()=>{this.sendPayload()})
     }
 

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import QuestionPayload from './QuestionPayload'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { css } from 'glamor'
+import { ToastContainer } from 'react-toastify'
+import notify from './notify'
 
 class AddQuestion extends Component {
 
@@ -21,17 +20,15 @@ class AddQuestion extends Component {
     }
 
     addQuestion = () =>{
-        if( this.state.question === ''  ) toast('Unos nije validan', {
-            position: toast.POSITION.TOP_CENTER,
-            className: css({
-                background: '#b71c1c',
-                color: 'white'
-              }),
-              progressClassName: css({
-                background: 'grey'
-              })
-            }) 
-        this.props.addQuestion(this.state)
+        if( this.state.question === ''  ){
+            notify('Question field can not be left empty!')
+        } else if(this.state.payload.hasOwnProperty('min') && this.state.payload.hasOwnProperty('max') && this.state.payload.max < this.state.payload.min){
+            notify('Value of minimum can not be larger than that of a maximum!')
+        } else if(this.state.payload.hasOwnProperty('choices') && this.state.payload.choices.length == 0){
+            notify('You have to enter at least one choice for this question')
+        } else{
+            this.props.addQuestion(this.state)
+        }    
     }
 
     render(){
@@ -44,7 +41,9 @@ class AddQuestion extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <QuestionPayload addPayload={this.addPayload}/>
+                    <div className='container'>
+                        <QuestionPayload addPayload={this.addPayload}/>
+                    </div>
                 </div>
                 <ToastContainer />
                 <div className="row">

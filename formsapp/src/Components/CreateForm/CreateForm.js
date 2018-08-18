@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import Question from './Question';
+import Question from './Question'
 import axios from 'axios'
-import AddQuestion from './AddQuestion.js';
-
+import AddQuestion from './AddQuestion.js'
+import { ToastContainer } from 'react-toastify'
+import notify from './notify'
 
 const deletable = (SomeComponent,props, onDelete) => {
     return (
-      <div>
-        <a class="btn-floating btn-small waves-effect waves-light red darken-4 right"><i className="material-icons" onClick={onDelete} >delete</i></a>
+      <div className='container' >
+        <a class="btn-floating btn-small waves-effect waves-light red darken-4 right" style={{margin : "7px"} } ><i className="material-icons" onClick={onDelete} >delete</i></a> 
         <SomeComponent {...props}/>
         <br/>
       </div>
@@ -15,7 +16,6 @@ const deletable = (SomeComponent,props, onDelete) => {
 }
 
 class CreateForm extends Component {
-
 
   state={    
     title : '',
@@ -31,21 +31,11 @@ class CreateForm extends Component {
   }
 
   onTitleChange = (e) => {
-    e.persist()
-    this.setState((prevState, props) => {
-      var form = {...this.state.form}
-      form.title = e.target.value
-      return {form}
-    })
+    this.setState({title : e.target.value})
   }
 
   onDescriptionChange = (e) => {
-    e.persist();
-    this.setState((prevState, props) => {
-      var form = {...this.state.form}
-      form.description = e.target.value
-      return {form}
-    })
+    this.setState({description : e.target.value})
   }
 
   onQuestionDelete = (index) => {
@@ -56,9 +46,19 @@ class CreateForm extends Component {
   }
 
   createPool = () => {
-    axios.post('http://localhost:5000/createForm', this.state.questions).then((res)=>{
-      alert(res); 
-    }) 
+
+    if(this.state.questions.length == 0){
+      notify('You must have at least one question!')
+    }else if(this.state.title == ''){
+      notify('Title field can not be left empty!')
+    }else if(this.state.description == '' ){
+      notify('Description field can not be left empty!')
+    }else{
+      axios.post('http://localhost:5000/createForm', this.state.questions).then((res)=>{
+        alert(res); 
+      })
+    }
+
   }
 
   render(){
@@ -72,7 +72,7 @@ class CreateForm extends Component {
                   <div className="row">
                     <div className="input-field col s12">
                       <input id="FormName" type="text" className="validate white-text" onChange={this.onTitleChange}/>
-                      <label htmlFor="FormName">Name of form</label>
+                      <label htmlFor="FormName">Title of form</label>
                     </div>
                   </div>
                   <div className="row">
@@ -84,8 +84,6 @@ class CreateForm extends Component {
               </span>
               {
                 this.state.questions.map(
-                  
-                  //(question, index)=>(<Question {...question} index={index} disabled={true}/>)
                 (question,index)=>{
                   const DeletableQuestion = deletable(Question,{...question,index:index,disabled:true},()=>{this.onQuestionDelete(index)})
                   return DeletableQuestion;
@@ -96,9 +94,10 @@ class CreateForm extends Component {
               <AddQuestion addQuestion={this.addQuestion}/>
             </div>
             <div className="card-action">
-              <a class="btn-large waves-effect waves-light yellow darken-4 center center">CREATE POOL</a>
+              <a class="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.createPool}>CREATE POOL</a>
             </div>
           </div>
+          <ToastContainer />
         </div>
     );
   }
