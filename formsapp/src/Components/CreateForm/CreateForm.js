@@ -3,7 +3,7 @@ import Question from './Question'
 import axios from 'axios'
 import AddQuestion from './AddQuestion.js'
 import { ToastContainer } from 'react-toastify'
-import notify from './notify'
+import notify from '../notify'
 
 const deletable = (SomeComponent,props, onDelete) => {
     return (
@@ -94,7 +94,7 @@ class CreateForm extends Component {
               <AddQuestion addQuestion={this.addQuestion}/>
             </div>
             <div className="card-action">
-              <a class="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.createPool}>CREATE POOL</a>
+              <a class="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.createPool}>CREATE FORM</a>
             </div>
           </div>
           <ToastContainer />

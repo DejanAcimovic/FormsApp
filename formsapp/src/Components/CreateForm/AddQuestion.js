@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import QuestionPayload from './QuestionPayload'
 import { ToastContainer } from 'react-toastify'
-import notify from './notify'
+import notify from '../notify'
 
 class AddQuestion extends Component {
 

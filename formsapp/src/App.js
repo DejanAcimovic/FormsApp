@@ -4,6 +4,7 @@ import './App.css';
 import LoginForm from './Components/Login/LoginForm.js'
 import NavBar from './Components/NavBar.js'
 import CreateForm from './Components/CreateForm/CreateForm.js'
+import FillForm from './Components/Form/FillForm'
 
 class App extends Component {
   render() {
@@ -11,7 +12,7 @@ class App extends Component {
       <div className="App">
         <NavBar />
 
-          <CreateForm  />
+          <FillForm  />
 
       </div>
     );
