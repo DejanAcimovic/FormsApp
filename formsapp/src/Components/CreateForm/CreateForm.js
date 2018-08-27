@@ -54,7 +54,13 @@ class CreateForm extends Component {
     }else if(this.state.description == '' ){
       notify('Description field can not be left empty!')
     }else{
-      axios.post('http://localhost:5000/createForm', this.state.questions).then((res)=>{
+      let form = {
+        title: this.state.title,
+        creator_id: 1,//ovo je privremeno
+        description: this.state.description, 
+        questions: this.state.questions
+      }
+      axios.post('http://localhost:5000/form/createForm', form).then((res)=>{
         alert(res); 
       })
     }

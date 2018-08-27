@@ -12,7 +12,7 @@ class App extends Component {
       <div className="App">
         <NavBar />
 
-          <FillForm  />
+          <CreateForm  />
 
       </div>
     );
