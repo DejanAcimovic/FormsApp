@@ -8,20 +8,22 @@ exports.create_form = function(req, res){
         questions:req.body.questions
     })
 
-    formObject.save(function(err){
+    formObject.save(function(err, form){
         if(err){
             console.log(err.message)
+        }else{
+            console.log(form)
+            res.send('nebitno')
         }
-
-        res.send('Uspjesno je upisano')
     })
 }
 
 exports.get_form = function(req, res){
-    From.findById(req.params.id, '-questions', (err, form)=>{
+    Form.findById(req.params.id, '-answers', (err, form)=>{
         if(err){
             console.log('Greska prilikom dobavljanja iz baze')
+        }else{
+            res.send(form)
         }
-        res.send(form);
     })
 }

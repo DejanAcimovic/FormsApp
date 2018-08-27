@@ -11,7 +11,7 @@ let FromsSchema = new Schema({
             min:{type: Number, required: false},
             max:{type: Number, required: false},
             type:{type: String, required: true},
-            choices: [String]
+            choices: {type: [String], required: false}
         }
     }],
     answers:[Schema.Types.Mixed]

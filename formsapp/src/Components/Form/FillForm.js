@@ -7,7 +7,9 @@ import notify from '../notify'
 
 class FillForm extends Component {
 
-    state = {
+    constructor(props){
+        super(props)
+        this.state = {
             id:1,
             title: 'Proba forma',
             description: 'probni opis',
@@ -20,7 +22,26 @@ class FillForm extends Component {
             ],
             answers:new Array(5)
     }
+    }
+    
+    componentDidMount(){
+        const id = this.props.match.params.id
+        console.log(id)
 
+        axios.get(`http://localhost:5000/form/${id}`).then((res)=>{
+            var data = res.data
+            var length = res.data.questions.length
+            this.setState({
+                id: data.id,
+                title: data.title,
+                description: data.description,
+                questions: data.questions,
+                answers:new Array(length)
+            })
+        }).catch((err)=>{
+            console.log(err.message)
+        })
+    }
     onAnswerChange= (index, answer) => {
         let answers = [...this.state.answers]
         answers[index] = answer
@@ -65,7 +86,7 @@ class FillForm extends Component {
                     }
                 </div>
                 <div className="card-action">
-                    <a class="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.submitForm}>SUBMIT</a>
+                    <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.submitForm}>SUBMIT</a>
                 </div>
                 <ToastContainer/>
             </div>
