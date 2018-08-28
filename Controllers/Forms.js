@@ -27,3 +27,25 @@ exports.get_form = function(req, res){
         }
     })
 }
+
+exports.add_answer = function(req, res){
+    Form.updateOne({_id: req.body.id},{$push:{answers:req.body.answer}}, (err, form)=>{
+       if(err){
+           console.log(err)
+       }else{	
+	console.log(form)
+        res.send(form)
+       }
+    })
+}
+
+exports.get_forms = function(req,res){
+    Form.find({creator_id: req.params.creator_id}, '+title +description +_id', (err, forms)=>{
+        if(err){
+            console.log(err.message)
+        }else{
+            console.log(forms)
+            res.send(forms)
+        }
+    })
+}

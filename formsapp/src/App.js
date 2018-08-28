@@ -6,6 +6,7 @@ import NavBar from './Components/NavBar.js'
 import CreateForm from './Components/CreateForm/CreateForm.js'
 import FillForm from './Components/Form/FillForm'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import SearchFroms from './Components/Form/SearchForm'
 
 class App extends Component {
 
@@ -16,7 +17,9 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
               <Route path="/form" component={CreateForm} />
-              <Route path="/:id" component={FillForm} />
+              <Route path="/fill/:id" component={FillForm} />
+              <Route path="/searchForms" component={SearchFroms}/>
+              
           </Switch>
         </BrowserRouter>
       </div>

@@ -61,8 +61,10 @@ class CreateForm extends Component {
         questions: this.state.questions
       }
       axios.post('http://localhost:5000/form/createForm', form).then((res)=>{
-        alert(res); 
-      })
+        notify('Vas unos je uspjesno prijavljen'); 
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
 
   }

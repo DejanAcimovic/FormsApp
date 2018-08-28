@@ -9,19 +9,8 @@ class FillForm extends Component {
 
     constructor(props){
         super(props)
-        this.state = {
-            id:1,
-            title: 'Proba forma',
-            description: 'probni opis',
-            questions:[
-                {question:'alksdjf', payload:{type:'text'}},
-                {question:'alksdjf', payload:{type:'number',min:0,max:10}},
-                {question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},
-                {question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},
-                {question:'alksdjf', payload:{type:'multipleChoice',choices:['bla',';bla']}}
-            ],
-            answers:new Array(5)
-    }
+
+        this.state = { loaded : false}
     }
     
     componentDidMount(){
@@ -31,8 +20,10 @@ class FillForm extends Component {
         axios.get(`http://localhost:5000/form/${id}`).then((res)=>{
             var data = res.data
             var length = res.data.questions.length
+            console.log(res)
             this.setState({
-                id: data.id,
+                loaded : true,
+                id: id,
                 title: data.title,
                 description: data.description,
                 questions: data.questions,
@@ -64,31 +55,34 @@ class FillForm extends Component {
     }
 
     submitForm=()=>{
-        if(this.state.answers.indexOf(null) === -1){
-            notify('One or more fields are ilegal!')
-        }else{
-            axios.post('http://localhost:5000/createForm', {id: this.state.id, answers : this.state.answers }).then((res)=>{
-                alert(res); 
+            axios.post('http://localhost:5000/form/addAnswer', {id: this.state.id, answer : this.state.answers }).then((res)=>{
+                notify('Uspjeh'); 
             })
-        }
     }
+
     render(){
+        const loaded = this.state.loaded
         return(
             <div>
-                <h1>{this.state.title}</h1>
-                <h3>{this.state.description}</h3>
-                <div className='container'>
-                    {
-                        this.state.questions.map(
-                            (question,index)=>{
-                                return <Question {...question} index={index} disabled={false} onAnswerChange={this.onAnswerChange} onMultipleChoiceChanged={this.onMultipleChoiceChanged}/>
-                            })
-                    }
-                </div>
-                <div className="card-action">
-                    <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.submitForm}>SUBMIT</a>
-                </div>
-                <ToastContainer/>
+                {!loaded && <div>Loading...</div>}
+                {loaded && 
+                    <div>
+                        <h1>{this.state.title}</h1>
+                        <h3>{this.state.description}</h3>
+                        <div className='container'>
+                            {
+                                this.state.questions.map(
+                                    (question,index)=>{
+                                        return <Question {...question} index={index} disabled={false} onAnswerChange={this.onAnswerChange} onMultipleChoiceChanged={this.onMultipleChoiceChanged}/>
+                                    })
+                            }
+                        </div>
+                        <div className="card-action">
+                            <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.submitForm}>SUBMIT</a>
+                        </div>
+                        <ToastContainer/>
+                    </div>
+                }
             </div>
         )
     }
