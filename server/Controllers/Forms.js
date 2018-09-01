@@ -12,7 +12,6 @@ exports.create_form = function(req, res){
         if(err){
             console.log(err.message)
         }else{
-            console.log(form)
             res.send('nebitno')
         }
     })
@@ -29,11 +28,10 @@ exports.get_form = function(req, res){
 }
 
 exports.add_answer = function(req, res){
-    Form.updateOne({_id: req.body.id},{$push:{answers:req.body.answer}}, (err, form)=>{
+    Form.updateOne({_id: req.body.id},{$push:{answers:{answer: req.body.answer}}}, (err, form)=>{
        if(err){
            console.log(err)
        }else{	
-	console.log(form)
         res.send(form)
        }
     })
@@ -44,8 +42,17 @@ exports.get_forms = function(req,res){
         if(err){
             console.log(err.message)
         }else{
-            console.log(forms)
             res.send(forms)
+        }
+    })
+}
+
+exports.get_individual_results = function(req,res){
+    Form.findOne({_id : req.params.id},(err, form)=>{
+        if(err){
+            console.log(err)
+        }else{
+            res.send(form)
         }
     })
 }

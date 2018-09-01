@@ -10,6 +10,7 @@ const Question = (props)=>(
           props.payload.type==='text' &&
           <input type='text' 
           disabled={!!props.disabled}
+          placeholder = { (!!props.disabled && props.hasOwnProperty('answer')) ? props.answer : null }
           onChange={(e)=>{
             props.onAnswerChange(props.index, e.target.value)
           }}/>
@@ -19,7 +20,8 @@ const Question = (props)=>(
           <input type='number' className="validate white-text" 
             min={props.payload.min} 
             max={props.payload.max} 
-            defaultValue={props.payload.min} 
+            defaultValue={props.payload.min}
+            value = { (!!props.disabled && props.hasOwnProperty('answer')) ? props.answer : props.payload.min }
             disabled={!!props.disabled}
             onChange={(e)=>{
               if(e.target.value >= props.payload.min && e.target.value <= props.payload.max)
@@ -33,7 +35,9 @@ const Question = (props)=>(
           props.payload.choices.map((choice)=>(
             <p>
               <label>
-                <input name={'r'+props.index} type="radio" value={choice} disabled={!!props.disabled} 
+                <input name={'r'+props.index} type="radio" value={choice} 
+                disabled={!!props.disabled} 
+                checked = { (!!props.disabled && props.hasOwnProperty('answer') && props.answer === choice) ? true : null }
                 onChange = { (e) => {
                     props.onAnswerChange(props.index, e.target.value)
                   }
@@ -53,7 +57,12 @@ const Question = (props)=>(
           props.payload.choices.map((choice)=>(
             <p>
               <label>
-                <input name={'c'+props.index} type="checkbox" value={choice} disabled={!!props.disabled}
+                <input name={'c'+props.index} 
+                  type="checkbox" 
+                  value={choice} 
+                  disabled={!!props.disabled}
+                  //provjeravanje ispod ne daje uvijek dobre rezultate. problem je vjerovatno u trecem djelu uslova
+                  checked = { (!!props.disabled && props.hasOwnProperty('answer') && props.answer.includes(choice)) ? true : null }
                   onChange={(e) => {
                     props.onMultipleChoiceChanged(props.index, e.target.value)
                   }} />

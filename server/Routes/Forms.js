@@ -8,5 +8,6 @@ router.post('/createForm', forms_controller.create_form)
 router.get('/:id', forms_controller.get_form)
 router.post('/addAnswer', forms_controller.add_answer)
 router.get('/getForms/:creator_id', forms_controller.get_forms)
+router.get('/result/:id', forms_controller.get_individual_results)
 
 module.exports = router

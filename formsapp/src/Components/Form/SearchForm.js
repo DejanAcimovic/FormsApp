@@ -21,20 +21,20 @@ class SearchFroms extends Component{
         <div className='container'>
             {this.state.loaded === false && <div>Loading...</div>}
             {this.state.loaded && this.state.forms.map((form)=>(
-                <div>
-                    <ul className='collection'>
-                        <li className='collection-item'>
+                <div className = 'container blue-grey'>
                             <h1>
                                 {form.title}
                             </h1>
                             <p>
                                 {form.description}
                             </p>
-                            <p>
-                                Link: http://localhost:3000/fill/{form._id}
-                            </p>
-                        </li>
-                    </ul>
+                            <div>
+                                Link: 
+                                <a href={`http://localhost:3000/fill/${form._id}`}>
+                                    http://localhost:3000/fill/{form._id}
+                                </a>
+                            </div>
+                        
                 </div>
             ))}
         </div>

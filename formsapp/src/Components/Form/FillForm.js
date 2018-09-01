@@ -18,9 +18,10 @@ class FillForm extends Component {
         console.log(id)
 
         axios.get(`http://localhost:5000/form/${id}`).then((res)=>{
+
+            console.log(res)
             var data = res.data
             var length = res.data.questions.length
-            console.log(res)
             this.setState({
                 loaded : true,
                 id: id,
