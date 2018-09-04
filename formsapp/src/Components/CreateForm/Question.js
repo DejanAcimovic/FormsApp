@@ -21,7 +21,7 @@ const Question = (props)=>(
             min={props.payload.min} 
             max={props.payload.max} 
             defaultValue={props.payload.min}
-            value = { (!!props.disabled && props.hasOwnProperty('answer')) ? props.answer : props.payload.min }
+            value = { (!!props.disabled && props.hasOwnProperty('answer')) ? props.answer : null}
             disabled={!!props.disabled}
             onChange={(e)=>{
               if(e.target.value >= props.payload.min && e.target.value <= props.payload.max)

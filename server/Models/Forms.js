@@ -14,7 +14,11 @@ let FromsSchema = new Schema({
             choices: {type: [String], required: false}
         }
     }],
-    answers:[{answer:{type:[Schema.Types.Mixed]}}]
+    answers:[{answer:{type:[Schema.Types.Mixed]}}],
+    agregated_results:{
+        number_of_answers: Number, 
+        answers:[{answer:{type : Schema.Types.Mixed, required : false }}]
+    }
 })
 
 module.exports = mongoose.model('Forms', FromsSchema)

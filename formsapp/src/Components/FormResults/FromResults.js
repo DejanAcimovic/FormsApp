@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Question from '../CreateForm/Question'
-
+import {HorizontalBar} from 'react-chartjs-2'
 
 class FromResult extends Component{
     state = {
         loaded : false
+        
     }
 
     componentDidMount(){
@@ -13,7 +14,11 @@ class FromResult extends Component{
         axios.get(`http://localhost:5000/form/result/${id}`)
         .then((res)=>{
             console.log(res)
-            this.setState({form : res.data, loaded: true, individualView: true, currentAnswer : 0})
+
+            this.setState({form : res.data, 
+                loaded: true, individualView: true, 
+                currentAnswer : 0,
+                  })
         })
         .catch((err)=>{
             console.log(err.message)
@@ -49,22 +54,77 @@ class FromResult extends Component{
                 }
                 {
                     this.state.loaded && 
-                    <div>
+                        <div className='container'> 
+
                         <h1>{this.state.form.title}</h1>
                         <p>{this.state.form.description}</p>
-                        
-                        {
-                            this.state.form.answers[this.state.currentAnswer].answer.map((question_answer, index)=>{
-                                    return <Question  {...this.state.form.questions[index]} answer={question_answer}  disabled={true} index={index} />
-                                })
-                        }
+                        <br/>
+                        <br/>
+                            Results:<br/>
+                            Number of answers:{this.state.form.agregated_results.number_of_answers}
+
                         <div className="card-action">
-                            <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.previousAnswer}>PREVIOUS ANSWER</a>
-                            {" "}
-                            <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.nextAnswer}>NEXT ANSWER</a>
+                            <a className="btn-small waves-effect waves-light yellow darken-4 center center" onClick={()=>{this.setState({individualView : !this.state.individualView})}}>CHANGE VIEW</a>
                         </div>
-                    </div>
+                        <br/>
+                            {this.state.individualView &&
+                                <div>
+                                    {
+                                        this.state.form.answers[this.state.currentAnswer].answer.map((question_answer, index)=>{
+                                                return <Question  {...this.state.form.questions[index]} answer={question_answer}  disabled={true} index={index} />
+                                            })
+                                    }
+                                    <div className="card-action">
+                                        <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.previousAnswer}>PREVIOUS ANSWER</a>
+                                        {" "}
+                                        <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.nextAnswer}>NEXT ANSWER</a>
+                                    </div>
+                                </div>
+                            }
+                            {
+                                !this.state.individualView &&
+                                <div>
+                                    <div className='container'>
+                                        {
+                                            this.state.form.agregated_results.answers.map((answer, i)=>{
+                                                if(this.state.form.questions[i].payload.type !== 'text' &&
+                                                    this.state.form.questions[i].payload.type !== 'number') {
+                                                    const data = {
+                                                    labels: this.state.form.questions[i].payload.choices,
+                                                    datasets: [
+                                                    {
+                                                        label: this.state.form.questions[i].question,
+                                                        backgroundColor: '#FF7800',
+                                                        borderWidth: 1,
+                                                        hoverBackgroundColor: '#d86600',
+                                                        data: answer.answer
+                                                    }
+                                                    ]
+                                                };
+
+                                                    return (
+                                                        <div>
+                                                            <p className='left'><b>{i+1}.{this.state.form.questions[i].question}</b></p>
+                                                            <HorizontalBar data = {data}/> 
+                                                        </div>)
+                                                } else if(this.state.form.questions[i].payload.type === 'number'){
+                                                    let average = this.state.form.agregated_results.answers[i].answer/this.state.form.agregated_results.number_of_answers
+                                                        
+                                                    return (
+                                                        <div>
+                                                            <p><b>{i+1}.{this.state.form.questions[i].question}</b></p><br/>
+                                                            <p>Average response is: {average} </p>
+                                                        </div>
+                                                    )
+                                                }
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                                }
+                        </div>
                 }
+                
             </div>
         )
     }
