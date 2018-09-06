@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import LoginFormFields from './LoginFormFields.js'
+import Registration from './Registration'
 
 
-class LoginForm extends Component {
-  render() {
-    return (
+let LoginForm = ()=>(
       <div className="row">
-        <div className="col s4 offset-m4">
+      <br/>
+      <br/>
+        <div className="col s4 offset-m2">
           <div className="card white">
             <LoginFormFields />
-            <div className="card-action">
-              <a href="#">Log In</a>
-            </div>
+          </div>
+        </div>
+        <div className="col s4 ">
+        <div className="card white">
+            <Registration/>
           </div>
         </div>
       </div>
-    );
-  }
-}
+)
 
-export default LoginForm;
+export default LoginForm

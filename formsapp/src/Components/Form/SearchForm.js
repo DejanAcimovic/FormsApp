@@ -9,7 +9,12 @@ class SearchFroms extends Component{
     }
 
     componentDidMount(){
-        axios.get(`http://localhost:5000/form/getForms/${this.state.creator_id}`).then((res)=>{
+        let token = undefined
+        if(localStorage.hasOwnProperty('token')){
+            token = 'Bearer ' + localStorage.getItem('token')
+        }
+
+        axios.get(`http://localhost:5000/form/getForms/${this.state.creator_id}`, { headers: { Authorization: token } }).then((res)=>{
             this.setState({forms:res.data, loaded: true})
             console.log(res)//treba dodati ako nema od tog korisnika anketa 
         }).catch((err)=>{
@@ -20,8 +25,12 @@ class SearchFroms extends Component{
     render(){ return(
         <div className='container'>
             {this.state.loaded === false && <div>Loading...</div>}
-            {this.state.loaded && this.state.forms.map((form)=>(
-                <div className = 'container blue-grey'>
+            {this.state.loaded && <div>
+                <br/>
+                <a className="btn-large waves-effect waves-light yellow darken-4 center center" href='/form'>NEW FORM</a>
+                <br/>
+                {this.state.forms.map((form)=>(
+                <div className = 'card white '>
                             <h1>
                                 {form.title}
                             </h1>
@@ -29,14 +38,23 @@ class SearchFroms extends Component{
                                 {form.description}
                             </p>
                             <div>
-                                Link: 
-                                <a href={`http://localhost:3000/fill/${form._id}`}>
+                                Link: {" "}
+                                <a href={`/fill/${form._id}`} className='grey-text'>
                                     http://localhost:3000/fill/{form._id}
+                                </a>
+                            </div>
+
+                            <div>
+                                Results: {" "}
+                                <a href={`/result/${form._id}`} className='grey-text'>
+                                    http://localhost:3000/result/{form._id}
                                 </a>
                             </div>
                         
                 </div>
             ))}
+            </div>
+        }
         </div>
     )}
 }

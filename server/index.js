@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const util = require('util')
 
 const form = require('./Routes/Forms')
+const user = require('./Routes/Users')
 
 const app = express()
 
@@ -19,6 +20,7 @@ mongoose.Promise = global.Promise
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use('/form', form)
+app.use('/user', user)
 
 const PORT = 5000
 app.listen(PORT, ()=> console.log(`Server started at port ${PORT}`))

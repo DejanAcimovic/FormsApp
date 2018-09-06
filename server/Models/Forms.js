@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 let FromsSchema = new Schema({
     title: {type: String, required: true},
     description: {type: String, required: true},
-    creator_id: String,
+    creator_id: {type: String, required : true},
     questions: [{
         question: {type: String, required: true},
         payload: {

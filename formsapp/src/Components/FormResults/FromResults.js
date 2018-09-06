@@ -11,7 +11,13 @@ class FromResult extends Component{
 
     componentDidMount(){
         let id = this.props.match.params.id
-        axios.get(`http://localhost:5000/form/result/${id}`)
+
+        let token = undefined
+        if(localStorage.hasOwnProperty('token')){
+            token = 'Bearer ' + localStorage.getItem('token')
+        }
+
+        axios.get(`http://localhost:5000/form/result/${id}`, { headers: { Authorization: token } })
         .then((res)=>{
             console.log(res)
 
@@ -69,10 +75,13 @@ class FromResult extends Component{
                         <br/>
                             {this.state.individualView &&
                                 <div>
-                                    {
-                                        this.state.form.answers[this.state.currentAnswer].answer.map((question_answer, index)=>{
-                                                return <Question  {...this.state.form.questions[index]} answer={question_answer}  disabled={true} index={index} />
-                                            })
+                                    { this.state.form.answers.length !== 0 && 
+                                        <div>
+                                            {this.state.form.answers[this.state.currentAnswer].answer.map((question_answer, index)=>{
+                                                    return <Question  {...this.state.form.questions[index]} answer={question_answer}  disabled={true} index={index} />
+                                                })
+                                            }
+                                        </div>
                                     }
                                     <div className="card-action">
                                         <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.previousAnswer}>PREVIOUS ANSWER</a>

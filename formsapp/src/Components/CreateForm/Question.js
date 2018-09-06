@@ -61,8 +61,7 @@ const Question = (props)=>(
                   type="checkbox" 
                   value={choice} 
                   disabled={!!props.disabled}
-                  //provjeravanje ispod ne daje uvijek dobre rezultate. problem je vjerovatno u trecem djelu uslova
-                  checked = { (!!props.disabled && props.hasOwnProperty('answer') && props.answer.includes(choice)) ? true : null }
+                  checked = { !!props.disabled ? (props.hasOwnProperty('answer') && props.answer.includes(choice) ? true : false) : null }
                   onChange={(e) => {
                     props.onMultipleChoiceChanged(props.index, e.target.value)
                   }} />

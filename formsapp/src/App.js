@@ -21,6 +21,7 @@ class App extends Component {
               <Route path="/fill/:id" component={FillForm} />
               <Route path="/searchForms" component={SearchFroms}/>
               <Route path='/result/:id' component={FromResults}/>
+              <Route path='/login' component={LoginForm}/>
           </Switch>
         </BrowserRouter>
       </div>

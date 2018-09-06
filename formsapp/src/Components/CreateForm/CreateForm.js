@@ -20,7 +20,7 @@ class CreateForm extends Component {
   state={    
     title : '',
     description : '',
-    questions:[{question:'alksdjf', payload:{type:'text'}},{question:'alksdjf', payload:{type:'number',min:0,max:10}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'singleChoice',choices:['bla',';bla']}},{question:'alksdjf', payload:{type:'multipleChoice',choices:['bla',';bla']}}]
+    questions:[]
   }
 
   addQuestion = (question) =>{
@@ -60,7 +60,11 @@ class CreateForm extends Component {
         description: this.state.description, 
         questions: this.state.questions
       }
-      axios.post('http://localhost:5000/form/createForm', form).then((res)=>{
+      let token = undefined
+        if(localStorage.hasOwnProperty('token')){
+            token = 'Bearer ' + localStorage.getItem('token')
+        }
+      axios.post('http://localhost:5000/form/createForm', form, { headers: { Authorization: token } }).then((res)=>{
         notify('Vas unos je uspjesno prijavljen'); 
       }).catch(function (error) {
         console.log(error);

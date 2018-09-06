@@ -1,36 +1,49 @@
 let Form = require('../Models/Forms')
+let jwt = require('jsonwebtoken')
+const key = "FormsKey"
 
 exports.create_form = function(req, res){
 
-    let mock_answers = []
-    for(i=0; i<req.body.questions.length; i++){
-        if(req.body.questions[i].payload.type === 'number'){
-            mock_answers.push({answer : 0})
-        }else if(req.body.questions[i].payload.type !== 'text'){
-            mock_answers.push({ answer : new Array(req.body.questions[i].payload.choices.length).fill(0) })
-        } else {
-            mock_answers.push({answers : null})
-        }
-    }
-
-    let formObject = new Form({
-        title: req.body.title,
-        description: req.body.description,
-        creator_id: req.body.creator_id,
-        questions:req.body.questions,
-        agregated_results:{
-            number_of_answers : 0,
-            answers : mock_answers
-        }
-    })
-
-    formObject.save(function(err, form){
+    jwt.verify(req.token, key, (err, data)=>{
         if(err){
-            console.log(err.message)
+            console.log(err)
         }else{
-            res.send('nebitno')
+            let mock_answers = []
+            for(i=0; i<req.body.questions.length; i++){
+                if(req.body.questions[i].payload.type === 'number'){
+                    mock_answers.push({answer : 0})
+                }else if(req.body.questions[i].payload.type !== 'text'){
+                    mock_answers.push({ answer : new Array(req.body.questions[i].payload.choices.length).fill(0) })
+                } else {
+                    mock_answers.push({answers : null})
+                }
+            }
+
+            console.log(data)
+
+            let formObject = new Form({
+                title: req.body.title,
+                description: req.body.description,
+                questions:req.body.questions,
+                agregated_results:{
+                    number_of_answers : 0,
+                    answers : mock_answers
+                },
+                creator_id: data.user._id
+            })
+
+
+            formObject.save(function(err, form){
+                if(err){
+                    console.log(err.message)
+                }else{
+                    res.send('nebitno')
+                }
+            })
         }
     })
+
+    
 }
 
 exports.get_form = function(req, res){
@@ -82,21 +95,39 @@ exports.add_answer = function(req, res){
 }
 
 exports.get_forms = function(req,res){
-    Form.find({creator_id: req.params.creator_id}, '+title +description +_id', (err, forms)=>{
-        if(err){
-            console.log(err.message)
-        }else{
-            res.send(forms)
-        }
-    })
-}
-
-exports.get_individual_results = function(req,res){
-    Form.findOne({_id : req.params.id},(err, form)=>{
+    jwt.verify(req.token, key, (err, data)=>{
         if(err){
             console.log(err)
         }else{
-            res.send(form)
+            Form.find({creator_id: data.user._id}, '+title +description +_id', (err, forms)=>{
+            if(err){
+                console.log(err.message)
+            }else{
+                res.send(forms)
+            }
+        })
+        }
+    })
+    
+}
+
+exports.get_individual_results = function(req,res){
+    jwt.verify(req.token, key, (err, data)=>{
+        if(err){
+            console.log(err)
+        }else{
+            Form.findOne({_id : req.params.id},(err, form)=>{
+                if(err){
+                    console.log(err)
+                }else{
+                    if(form.creator_id != data.user._id){
+                        res.sendStatus(403)
+                    }else{
+
+                        res.send(form)
+                    }
+                }
+            })
         }
     })
 }
