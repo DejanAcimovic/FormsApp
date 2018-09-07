@@ -65,9 +65,13 @@ class CreateForm extends Component {
             token = 'Bearer ' + localStorage.getItem('token')
         }
       axios.post('http://localhost:5000/form/createForm', form, { headers: { Authorization: token } }).then((res)=>{
-        notify('Vas unos je uspjesno prijavljen'); 
+        notify('Success'); 
       }).catch(function (error) {
-        console.log(error);
+        if(error.response.status == 403 ){
+          window.location.href = '/unauthorized'
+        }else{
+          notify(error.message)
+        }
       });
     }
 

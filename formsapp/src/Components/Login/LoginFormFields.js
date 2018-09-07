@@ -4,9 +4,6 @@ import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import notify from '../notify'
 
-import {withRouter} from 'react-router-dom'
-
-
 class LoginFormFields extends Component {
   state = {
     username: null, 
@@ -29,9 +26,13 @@ login = () =>{
     .then((res)=>{
       console.log('usao')
       localStorage.setItem('token', res.data.token)
-      this.props.history.push('http://localhost:3000/searchForms')
+      window.location.href = '/searchForms'
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>{
+      if(err.response.status == 403 ) notify("Wrong password or username")
+      else
+        notify(err.message)
+    })
   }
 }
   render(){

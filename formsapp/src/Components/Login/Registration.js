@@ -34,7 +34,9 @@ class Registration extends Component {
                 console.log(res)
             })
             .catch( (err)=>{
-                console.log(err)
+                if(err.response.status == 406) notify('User already exists')
+                else 
+                notify(err.message)
             }
             )
         }

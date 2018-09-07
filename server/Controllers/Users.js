@@ -9,7 +9,7 @@ exports.registration = function(req, res){
         if(err){
             console.log(err.messae)
         }else if(count > 0){
-            res.send('Nije dobro')
+            res.sendStatus(406)
         }else{
             bcrypt.genSalt(saltRounds, function(err, salt) {
                 bcrypt.hash(req.body.password, salt, function(err, hash) {
@@ -34,7 +34,7 @@ exports.registration = function(req, res){
 exports.login = function(req, res){
     User.count({username : req.body.username} ,(err, count)=>{
         if(count === 0){
-            res.send('Nepostojeci korisnik')
+            res.sendStatus(403)
         } else {
             User.findOne({username : req.body.username}, (err, user)=>{
                 
@@ -46,7 +46,7 @@ exports.login = function(req, res){
                             res.json({token})
                         } )
                     } else {
-                        res.send('Pogresan password')
+                        res.sendStatus(403)
                     }
                 });
             })

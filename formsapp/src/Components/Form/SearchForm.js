@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
+import { ToastContainer } from 'react-toastify'
+import notify from '../notify'
+
 class SearchFroms extends Component{
     state={
         creator_id: 1,
@@ -18,7 +21,11 @@ class SearchFroms extends Component{
             this.setState({forms:res.data, loaded: true})
             console.log(res)//treba dodati ako nema od tog korisnika anketa 
         }).catch((err)=>{
-            console.log(err)
+            if(err.response.status == 403 ){
+                window.location.href = '/unauthorizes'
+            }else{
+                notify(err.message)
+            }
         })
     }
 
@@ -55,6 +62,7 @@ class SearchFroms extends Component{
             ))}
             </div>
         }
+        <ToastContainer/>
         </div>
     )}
 }

@@ -29,9 +29,18 @@ class FillForm extends Component {
                 description: data.description,
                 questions: data.questions,
                 answers:new Array(length)
+            }, ()=>{
+                res.data.questions.map((question, index)=>{
+                    if(question.payload.type === 'number'){
+                        if(question.payload.hasOwnProperty('min'))
+                            this.state.answers[index] = question.payload.min
+                        else 
+                            this.state.answer[index] = 0
+                    }
+                })
             })
         }).catch((err)=>{
-            console.log(err.message)
+            notify(err.message)
         })
     }
     onAnswerChange= (index, answer) => {
@@ -56,9 +65,16 @@ class FillForm extends Component {
     }
 
     submitForm=()=>{
+        if(Object.values(this.state.answers).includes(null) === false){
             axios.post('http://localhost:5000/form/addAnswer', {id: this.state.id, answer : this.state.answers }).then((res)=>{
-                notify('Uspjeh'); 
+                window.location.href='/success'
+            }).catch((err)=>{
+                notify(err.message)
             })
+        } else {
+            notify('One or more fields is invalid')
+        }
+        
     }
 
     render(){
@@ -78,6 +94,7 @@ class FillForm extends Component {
                                     })
                             }
                         </div>
+                        <br/>
                         <div className="card-action">
                             <a className="btn-large waves-effect waves-light yellow darken-4 center center" onClick={this.submitForm}>SUBMIT</a>
                         </div>

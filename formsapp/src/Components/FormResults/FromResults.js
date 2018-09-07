@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import Question from '../CreateForm/Question'
 import {HorizontalBar} from 'react-chartjs-2'
+import notify from '../notify';
 
 class FromResult extends Component{
     state = {
@@ -27,7 +28,11 @@ class FromResult extends Component{
                   })
         })
         .catch((err)=>{
-            console.log(err.message)
+            if(err.response.status == 403){
+                window.location.href  = '/unauthorized'
+            }else{
+                notify(err.message)
+            }
         })
         
     }

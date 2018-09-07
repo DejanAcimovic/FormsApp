@@ -8,7 +8,8 @@ import FillForm from './Components/Form/FillForm'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import SearchFroms from './Components/Form/SearchForm'
 import FromResults from './Components/FormResults/FromResults'
-
+import Unauthorized from './Components/Unauthorized'
+import Success from './Components/Success'
 class App extends Component {
 
   render() {
@@ -22,6 +23,8 @@ class App extends Component {
               <Route path="/searchForms" component={SearchFroms}/>
               <Route path='/result/:id' component={FromResults}/>
               <Route path='/login' component={LoginForm}/>
+              <Route path='/unauthorized' component={Unauthorized}/>
+              <Route path='/success' component={Success}/>
           </Switch>
         </BrowserRouter>
       </div>

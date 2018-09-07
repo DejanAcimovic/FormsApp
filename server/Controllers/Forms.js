@@ -6,7 +6,7 @@ exports.create_form = function(req, res){
 
     jwt.verify(req.token, key, (err, data)=>{
         if(err){
-            console.log(err)
+            res.sendStatus(403)
         }else{
             let mock_answers = []
             for(i=0; i<req.body.questions.length; i++){
@@ -97,7 +97,7 @@ exports.add_answer = function(req, res){
 exports.get_forms = function(req,res){
     jwt.verify(req.token, key, (err, data)=>{
         if(err){
-            console.log(err)
+            res.sendStatus(403)
         }else{
             Form.find({creator_id: data.user._id}, '+title +description +_id', (err, forms)=>{
             if(err){
@@ -114,7 +114,7 @@ exports.get_forms = function(req,res){
 exports.get_individual_results = function(req,res){
     jwt.verify(req.token, key, (err, data)=>{
         if(err){
-            console.log(err)
+            res.sendStatus(403)
         }else{
             Form.findOne({_id : req.params.id},(err, form)=>{
                 if(err){

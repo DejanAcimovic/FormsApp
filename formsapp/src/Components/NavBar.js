@@ -10,7 +10,8 @@ const NavBar = () => {
           {localStorage.hasOwnProperty('token')&&
             <div>
               <ul id="nav-mobile" className="right hide-on-med-and-down">
-                <li><a href="#" onClick={()=>{localStorage.removeItem('token')}}>Log Out</a></li>
+                <li><a href="#" onClick={()=>{localStorage.removeItem('token')
+                window.location.href='/login'}}>Log Out</a></li>
               </ul>
             </div>
           }
