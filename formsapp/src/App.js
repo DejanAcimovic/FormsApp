@@ -10,6 +10,8 @@ import SearchFroms from './Components/Form/SearchForm'
 import FromResults from './Components/FormResults/FromResults'
 import Unauthorized from './Components/Unauthorized'
 import Success from './Components/Success'
+import NotFound from './Components/NotFound'
+
 class App extends Component {
 
   render() {
@@ -18,6 +20,7 @@ class App extends Component {
         <NavBar />
         <BrowserRouter>
           <Switch>
+              <Route exact path='/' component={localStorage.hasOwnProperty('token')? SearchFroms : LoginForm} />
               <Route path="/form" component={CreateForm} />
               <Route path="/fill/:id" component={FillForm} />
               <Route path="/searchForms" component={SearchFroms}/>
@@ -25,6 +28,7 @@ class App extends Component {
               <Route path='/login' component={LoginForm}/>
               <Route path='/unauthorized' component={Unauthorized}/>
               <Route path='/success' component={Success}/>
+              <Route path='*' component={NotFound}/>
           </Switch>
         </BrowserRouter>
       </div>
